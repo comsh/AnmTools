@@ -154,6 +154,13 @@ namespace AnmCommon {
 						rslt.Add((int)(fr.time * 1000));
 			return rslt;
 		}
+        public int getGender(){
+            foreach(AnmBoneEntry abe in this){
+                if(abe.boneName.StartsWith("ManBip",StringComparison.Ordinal)) return 1;
+                else if(abe.boneName.StartsWith("Bip01",StringComparison.Ordinal)) return 0;
+            }
+            return -1;
+        }
 	}
 
 	public class AnmBoneEntry : List<AnmFrameList> {

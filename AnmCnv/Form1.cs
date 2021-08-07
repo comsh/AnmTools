@@ -58,6 +58,21 @@ namespace AnmCnv {
                         foreach (AnmFrame f in fl) f.time=(f.time*1000+delay)/1000;
             }
 
+            if(chkHokan.Checked){
+                foreach (AnmBoneEntry bone in afw)
+                    foreach (AnmFrameList fl in bone){
+                        if(fl.Count==1) continue;
+                        if(!((fl.type>=100 && fl.type<=103 && chkHokanRot.Checked)||
+                             (fl.type>=104 && fl.type<=106 && chkHokanMove.Checked))) continue;
+                        fl.inOrder();
+                        AnmFrame prev=fl[0];
+                        for(int i=1; i<fl.Count; i++){
+                            prev.tan2=fl[i].tan1=(fl[i].value-prev.value)/(fl[i].time-prev.time);
+                            prev=fl[i];
+                        }
+                    }
+            }
+
             // １つもチェックなくても出力していいよね
 
             // 書き出し
@@ -70,6 +85,9 @@ namespace AnmCnv {
         }
         private void chkDelay_CheckedChanged(object sender, EventArgs e) {
             txtDelay.Enabled = chkDelay.Checked;
+        }
+        private void chkHokan_CheckedChanged(object sender,EventArgs e) {
+            chkHokanMove.Enabled=chkHokanRot.Enabled=chkHokan.Checked;
         }
 
         // ファイル選択
@@ -105,11 +123,13 @@ namespace AnmCnv {
             if (af==null) return;
             SortedSet<int> ts = af.getTimeSet();
 
+            int gi=af.getGender();
             string gender = "性別不明";
             chkGender.Enabled = true;
-            if (af[0].boneName.StartsWith("Bip01")) gender = "女性用";
-            else if (af[0].boneName.StartsWith("ManBip")) gender = "男性用";
+            if(gi==0) gender="女性用";
+            else if(gi==1) gender="男性用";
             else chkGender.Enabled = false;
+
             lblAnmInfo.Text = $"{gender}   時間範囲: {ts.Min}ms - {ts.Max}ms";
 
             txtSpeed.Text=ts.Max.ToString();
@@ -147,7 +167,8 @@ namespace AnmCnv {
                 new string[]{"Spine1a","Spine2"},
                 new string[]{"Bip01","ManBip"},
             };
-            int fm = (af[0].boneName.StartsWith("ManBip"))?1:0; // 男性->女性なら逆順
+            int fm = af.getGender();  // 男性->女性なら逆順
+            if(fm==-1) return;        // 性別不明
 
             // ボーン名変更
             int insPos = -1;

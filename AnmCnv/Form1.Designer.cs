@@ -39,11 +39,14 @@
             this.txtInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkHokanMove = new System.Windows.Forms.CheckBox();
+            this.chkHokanRot = new System.Windows.Forms.CheckBox();
+            this.chkHokan = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnCnv
             // 
-            this.btnCnv.Location = new System.Drawing.Point(173, 339);
+            this.btnCnv.Location = new System.Drawing.Point(160, 353);
             this.btnCnv.Name = "btnCnv";
             this.btnCnv.Size = new System.Drawing.Size(135, 23);
             this.btnCnv.TabIndex = 8;
@@ -181,7 +184,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(72, 251);
+            this.label1.Location = new System.Drawing.Point(72, 240);
             this.label1.MaximumSize = new System.Drawing.Size(350, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(350, 36);
@@ -191,11 +194,44 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(57, 251);
+            this.label2.Location = new System.Drawing.Point(57, 239);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 12);
             this.label2.TabIndex = 1001;
             this.label2.Text = "※";
+            // 
+            // chkHokanMove
+            // 
+            this.chkHokanMove.AutoSize = true;
+            this.chkHokanMove.Enabled = false;
+            this.chkHokanMove.Location = new System.Drawing.Point(247, 297);
+            this.chkHokanMove.Name = "chkHokanMove";
+            this.chkHokanMove.Size = new System.Drawing.Size(48, 16);
+            this.chkHokanMove.TabIndex = 1003;
+            this.chkHokanMove.Text = "移動";
+            this.chkHokanMove.UseVisualStyleBackColor = true;
+            // 
+            // chkHokanRot
+            // 
+            this.chkHokanRot.AutoSize = true;
+            this.chkHokanRot.Enabled = false;
+            this.chkHokanRot.Location = new System.Drawing.Point(321, 297);
+            this.chkHokanRot.Name = "chkHokanRot";
+            this.chkHokanRot.Size = new System.Drawing.Size(48, 16);
+            this.chkHokanRot.TabIndex = 1004;
+            this.chkHokanRot.Text = "回転";
+            this.chkHokanRot.UseVisualStyleBackColor = true;
+            // 
+            // chkHokan
+            // 
+            this.chkHokan.AutoSize = true;
+            this.chkHokan.Location = new System.Drawing.Point(45, 297);
+            this.chkHokan.Name = "chkHokan";
+            this.chkHokan.Size = new System.Drawing.Size(177, 16);
+            this.chkHokan.TabIndex = 1006;
+            this.chkHokan.Text = "補間値を線形補間に書き換える";
+            this.chkHokan.UseVisualStyleBackColor = true;
+            this.chkHokan.CheckedChanged += new System.EventHandler(this.chkHokan_CheckedChanged);
             // 
             // Form1
             // 
@@ -203,6 +239,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 411);
+            this.Controls.Add(this.chkHokan);
+            this.Controls.Add(this.chkHokanRot);
+            this.Controls.Add(this.chkHokanMove);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCnv);
@@ -247,6 +286,9 @@
         private System.Windows.Forms.TextBox txtInput;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkHokanMove;
+        private System.Windows.Forms.CheckBox chkHokanRot;
+        private System.Windows.Forms.CheckBox chkHokan;
     }
 }
 
