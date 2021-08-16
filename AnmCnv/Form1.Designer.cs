@@ -42,11 +42,12 @@
             this.chkHokanMove = new System.Windows.Forms.CheckBox();
             this.chkHokanRot = new System.Windows.Forms.CheckBox();
             this.chkHokan = new System.Windows.Forms.CheckBox();
+            this.chkMirror = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnCnv
             // 
-            this.btnCnv.Location = new System.Drawing.Point(160, 353);
+            this.btnCnv.Location = new System.Drawing.Point(154, 354);
             this.btnCnv.Name = "btnCnv";
             this.btnCnv.Size = new System.Drawing.Size(135, 23);
             this.btnCnv.TabIndex = 8;
@@ -57,7 +58,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(232, 211);
+            this.label9.Location = new System.Drawing.Point(232, 188);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 12);
             this.label9.TabIndex = 47;
@@ -66,7 +67,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(67, 211);
+            this.label8.Location = new System.Drawing.Point(67, 188);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(87, 12);
             this.label8.TabIndex = 46;
@@ -75,7 +76,7 @@
             // txtDelay
             // 
             this.txtDelay.Enabled = false;
-            this.txtDelay.Location = new System.Drawing.Point(160, 208);
+            this.txtDelay.Location = new System.Drawing.Point(160, 185);
             this.txtDelay.MaxLength = 9;
             this.txtDelay.Name = "txtDelay";
             this.txtDelay.Size = new System.Drawing.Size(66, 19);
@@ -86,7 +87,7 @@
             // chkDelay
             // 
             this.chkDelay.AutoSize = true;
-            this.chkDelay.Location = new System.Drawing.Point(45, 188);
+            this.chkDelay.Location = new System.Drawing.Point(45, 165);
             this.chkDelay.Name = "chkDelay";
             this.chkDelay.Size = new System.Drawing.Size(116, 16);
             this.chkDelay.TabIndex = 5;
@@ -96,7 +97,7 @@
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(245, 148);
+            this.label6.Location = new System.Drawing.Point(245, 134);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(177, 12);
             this.label6.TabIndex = 45;
@@ -105,7 +106,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(67, 148);
+            this.label5.Location = new System.Drawing.Point(67, 134);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 12);
             this.label5.TabIndex = 44;
@@ -114,7 +115,7 @@
             // txtSpeed
             // 
             this.txtSpeed.Enabled = false;
-            this.txtSpeed.Location = new System.Drawing.Point(173, 145);
+            this.txtSpeed.Location = new System.Drawing.Point(173, 131);
             this.txtSpeed.MaxLength = 9;
             this.txtSpeed.Name = "txtSpeed";
             this.txtSpeed.Size = new System.Drawing.Size(66, 19);
@@ -125,7 +126,7 @@
             // chkSpeed
             // 
             this.chkSpeed.AutoSize = true;
-            this.chkSpeed.Location = new System.Drawing.Point(45, 123);
+            this.chkSpeed.Location = new System.Drawing.Point(45, 109);
             this.chkSpeed.Name = "chkSpeed";
             this.chkSpeed.Size = new System.Drawing.Size(116, 16);
             this.chkSpeed.TabIndex = 3;
@@ -184,7 +185,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(72, 240);
+            this.label1.Location = new System.Drawing.Point(72, 217);
             this.label1.MaximumSize = new System.Drawing.Size(350, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(350, 36);
@@ -194,7 +195,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(57, 239);
+            this.label2.Location = new System.Drawing.Point(57, 216);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 12);
             this.label2.TabIndex = 1001;
@@ -204,7 +205,7 @@
             // 
             this.chkHokanMove.AutoSize = true;
             this.chkHokanMove.Enabled = false;
-            this.chkHokanMove.Location = new System.Drawing.Point(247, 297);
+            this.chkHokanMove.Location = new System.Drawing.Point(300, 269);
             this.chkHokanMove.Name = "chkHokanMove";
             this.chkHokanMove.Size = new System.Drawing.Size(48, 16);
             this.chkHokanMove.TabIndex = 1003;
@@ -215,7 +216,7 @@
             // 
             this.chkHokanRot.AutoSize = true;
             this.chkHokanRot.Enabled = false;
-            this.chkHokanRot.Location = new System.Drawing.Point(321, 297);
+            this.chkHokanRot.Location = new System.Drawing.Point(374, 269);
             this.chkHokanRot.Name = "chkHokanRot";
             this.chkHokanRot.Size = new System.Drawing.Size(48, 16);
             this.chkHokanRot.TabIndex = 1004;
@@ -225,13 +226,23 @@
             // chkHokan
             // 
             this.chkHokan.AutoSize = true;
-            this.chkHokan.Location = new System.Drawing.Point(45, 297);
+            this.chkHokan.Location = new System.Drawing.Point(45, 269);
             this.chkHokan.Name = "chkHokan";
-            this.chkHokan.Size = new System.Drawing.Size(177, 16);
+            this.chkHokan.Size = new System.Drawing.Size(231, 16);
             this.chkHokan.TabIndex = 1006;
-            this.chkHokan.Text = "補間値を線形補間に書き換える";
+            this.chkHokan.Text = "モーションの補間値を線形補間に書き換える";
             this.chkHokan.UseVisualStyleBackColor = true;
             this.chkHokan.CheckedChanged += new System.EventHandler(this.chkHokan_CheckedChanged);
+            // 
+            // chkMirror
+            // 
+            this.chkMirror.AutoSize = true;
+            this.chkMirror.Location = new System.Drawing.Point(45, 305);
+            this.chkMirror.Name = "chkMirror";
+            this.chkMirror.Size = new System.Drawing.Size(154, 16);
+            this.chkMirror.TabIndex = 1007;
+            this.chkMirror.Text = "モーションの左右を反転する";
+            this.chkMirror.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -239,6 +250,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 411);
+            this.Controls.Add(this.chkMirror);
             this.Controls.Add(this.chkHokan);
             this.Controls.Add(this.chkHokanRot);
             this.Controls.Add(this.chkHokanMove);
@@ -289,6 +301,7 @@
         private System.Windows.Forms.CheckBox chkHokanMove;
         private System.Windows.Forms.CheckBox chkHokanRot;
         private System.Windows.Forms.CheckBox chkHokan;
+        private System.Windows.Forms.CheckBox chkMirror;
     }
 }
 

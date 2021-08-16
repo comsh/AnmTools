@@ -1,6 +1,7 @@
 ﻿using AnmCommon;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AnmCnv {
@@ -73,10 +74,99 @@ namespace AnmCnv {
                     }
             }
 
+            if(chkMirror.Checked){
+                foreach (AnmBoneEntry bone in afw){
+                    bone.rename(mirrorBoneName(bone.boneName));
+                    if(bone.boneId==0) negFrameList2(bone,AXIS.X); // Bip01
+                    else if(bone.boneId==1) negFrameList2(bone,AXIS.Y); // 骨盤
+                    else if(bone.boneId==10) negFrameList2(bone,AXIS.Y); // 背骨1
+                    else if(bone.boneId==17||bone.boneId==23) negFrameList(bone,AXIS.X); // 鎖骨
+                    else negFrameList(bone,AXIS.Z);
+                }
+            }
+
             // １つもチェックなくても出力していいよね
 
             // 書き出し
             afw.write(outfilename);
+        }
+        enum AXIS{ X,Y,Z };
+        private void negFrameList(AnmBoneEntry abe,AXIS ax){
+            bool[] neg=new bool[7];
+            if(ax==AXIS.X) neg[1]=neg[2]=neg[4]=true;
+            else if(ax==AXIS.Y) neg[0]=neg[2]=neg[5]=true;
+            else neg[0]=neg[1]=neg[6]=true;
+            foreach (AnmFrameList fl in abe){
+                if(neg[fl.type-100]) foreach (AnmFrame f in fl){
+                    f.value=-f.value;
+                    f.tan1=-f.tan1;
+                    f.tan2=-f.tan2;
+                }
+            }
+        }
+        // 組み立て変換込みの反転
+        private void negFrameList2(AnmBoneEntry abe,AXIS ax){
+            bool[] neg=new bool[7];
+            if(ax==AXIS.X) neg[1]=neg[2]=neg[4]=true;
+            else if(ax==AXIS.Y) neg[0]=neg[2]=neg[5]=true;
+            else neg[0]=neg[1]=neg[6]=true;
+            abe.inOrder();  // 時間順を保証
+            List<float[]> ql=new List<float[]>();   // 四元数
+            List<float[]> ll=new List<float[]>();   // 旧value
+            foreach (AnmFrameList fl in abe){
+                if(fl.type<104){    // 回転はまず四元数と旧valueの取得だけ
+                    for(int i=0; i<fl.Count; i++){
+                        if(ql.Count==i){ ql.Add(new float[4]); ll.Add(new float[4]); }
+                        ql[i][fl.type-100]=ll[i][fl.type-100]=fl[i].value;
+                    }
+                }else if(neg[fl.type-100]) foreach (AnmFrame f in fl){ // 移動の反転は済ませる
+                    f.value=-f.value;f.tan1=-f.tan1;f.tan2=-f.tan2;
+                }
+            }
+            foreach(float[] q in ql){
+                // 右から組み立て変換の共益をかける。
+                // 定数だから式で書いた方がいいけど、別に速度を気にするツールでもないからこれでもOK
+                qmul(q,q,rKumitate);
+                // 結果を反転
+                if(neg[0]) q[0]*=-1;
+                if(neg[1]) q[1]*=-1;
+                if(neg[2]) q[2]*=-1;
+                // 組み立て変換をかけ直す
+                qmul(q,q,kumitate);
+            }
+            foreach (AnmFrameList fl in abe){
+                if(fl.type>=104) continue;
+                int ty=fl.type-100;
+                for(int i=0; i<fl.Count; i++){
+                    // 変換後の四元数セット
+                    fl[i].value=ql[i][ty];
+                    // 補正値を値の差の比例計算で修正
+                    float d;
+                    if(i>0 && !isZero(d=ll[i][ty]-ll[i-1][ty])) fl[i].tan1*=(ql[i][ty]-ql[i-1][ty])/d;
+                    if(i<fl.Count-1 && !isZero(d=ll[i+1][ty]-ll[i][ty])) fl[i].tan2*=(ql[i+1][ty]-ql[i][ty])/d;
+                }
+            }
+        }
+        private bool isZero(float f){ return f>-0.00000001f &&f<0.00000001f; }
+        private float[] kumitate={-0.5f,0.5f,0.5f,0.5f};
+        private float[] rKumitate={0.5f,-0.5f,-0.5f,0.5f};
+        private void qmul(float[] p,float[] q,float[] r){
+            float x = q[1]*r[2] - q[2]*r[1] + r[3]*q[0] + q[3]*r[0];
+            float y = q[2]*r[0] - q[0]*r[2] + r[3]*q[1] + q[3]*r[1];
+            float z = q[0]*r[1] - q[1]*r[0] + r[3]*q[2] + q[3]*r[2];
+            float w = q[3]*r[3] - q[0]*r[0] - r[1]*q[1] - q[2]*r[2];
+            p[0]=x; p[1]=y; p[2]=z; p[3]=w;
+        }
+        private string mirrorBoneName(string bname){
+            string t=Regex.Replace(bname,@"L\b","R"); // ほとんどこれで拾えるけど
+            if(t==bname){
+                t=Regex.Replace(bname,@"R\b","L");
+                return t.Replace("_R_","_L_");        // これだけ例外。Mune_L_subみたいなパターン
+                // Mune_L_sub型は同じ行にMune_Lがあって\bのヤツに引っかかってるはずだから
+                // LかRかの判断をやり直す必要はない
+            }else{
+                return t.Replace("_L_","_R_");
+            }
         }
 
         // UI連動

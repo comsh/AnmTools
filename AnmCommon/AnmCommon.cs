@@ -284,31 +284,31 @@ namespace AnmCommon {
 			new string[]{ "Bip01","ManBip","ST_Root" },		// 男性の場合ManBip
 			new string[]{ "Pelvis" },
 
-			new string[]{ "L Thigh" },
+			new string[]{ "L Thigh" }, //2
 			new string[]{ "L Calf" },
 			new string[]{ "L Foot" },
 			new string[]{ "L Toe0", "L Toe1", "L Toe2" },
 
-			new string[]{ "R Thigh" },
+			new string[]{ "R Thigh" }, //6
 			new string[]{ "R Calf" },
 			new string[]{ "R Foot" },
 			new string[]{ "R Toe0","R Toe1","R Toe2" },
 
-			new string[]{ "Spine" },
+			new string[]{ "Spine" }, //10
 			new string[]{ "Spine0a" },						// 男性の場合無い。というかSpineシリーズが１つ少ない
 			new string[]{ "Spine1" },
 			new string[]{ "Spine1a","Spine2" },				// 男性の場合Spine2
 			new string[]{ "Neck" },
 			new string[]{ "Head" },
 
-			new string[]{ "Mune_L" },
+			new string[]{ "Mune_L" }, //16
 			new string[]{ "L Clavicle" },
 			new string[]{ "L UpperArm" },
 			new string[]{ "L Forearm" },
 			new string[]{ "L Hand" },
 			new string[]{ "L Finger0", "L Finger1", "L Finger2", "L Finger3", "L Finger4" },
 
-			new string[]{ "Mune_R" },
+			new string[]{ "Mune_R" }, //22
 			new string[]{ "R Clavicle" },
 			new string[]{ "R UpperArm" },
 			new string[]{ "R Forearm" },
