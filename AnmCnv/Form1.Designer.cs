@@ -39,15 +39,12 @@
             this.txtInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.chkHokanMove = new System.Windows.Forms.CheckBox();
-            this.chkHokanRot = new System.Windows.Forms.CheckBox();
-            this.chkHokan = new System.Windows.Forms.CheckBox();
             this.chkMirror = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnCnv
             // 
-            this.btnCnv.Location = new System.Drawing.Point(154, 354);
+            this.btnCnv.Location = new System.Drawing.Point(173, 332);
             this.btnCnv.Name = "btnCnv";
             this.btnCnv.Size = new System.Drawing.Size(135, 23);
             this.btnCnv.TabIndex = 8;
@@ -201,43 +198,10 @@
             this.label2.TabIndex = 1001;
             this.label2.Text = "※";
             // 
-            // chkHokanMove
-            // 
-            this.chkHokanMove.AutoSize = true;
-            this.chkHokanMove.Enabled = false;
-            this.chkHokanMove.Location = new System.Drawing.Point(300, 269);
-            this.chkHokanMove.Name = "chkHokanMove";
-            this.chkHokanMove.Size = new System.Drawing.Size(48, 16);
-            this.chkHokanMove.TabIndex = 1003;
-            this.chkHokanMove.Text = "移動";
-            this.chkHokanMove.UseVisualStyleBackColor = true;
-            // 
-            // chkHokanRot
-            // 
-            this.chkHokanRot.AutoSize = true;
-            this.chkHokanRot.Enabled = false;
-            this.chkHokanRot.Location = new System.Drawing.Point(374, 269);
-            this.chkHokanRot.Name = "chkHokanRot";
-            this.chkHokanRot.Size = new System.Drawing.Size(48, 16);
-            this.chkHokanRot.TabIndex = 1004;
-            this.chkHokanRot.Text = "回転";
-            this.chkHokanRot.UseVisualStyleBackColor = true;
-            // 
-            // chkHokan
-            // 
-            this.chkHokan.AutoSize = true;
-            this.chkHokan.Location = new System.Drawing.Point(45, 269);
-            this.chkHokan.Name = "chkHokan";
-            this.chkHokan.Size = new System.Drawing.Size(231, 16);
-            this.chkHokan.TabIndex = 1006;
-            this.chkHokan.Text = "モーションの補間値を線形補間に書き換える";
-            this.chkHokan.UseVisualStyleBackColor = true;
-            this.chkHokan.CheckedChanged += new System.EventHandler(this.chkHokan_CheckedChanged);
-            // 
             // chkMirror
             // 
             this.chkMirror.AutoSize = true;
-            this.chkMirror.Location = new System.Drawing.Point(45, 305);
+            this.chkMirror.Location = new System.Drawing.Point(45, 275);
             this.chkMirror.Name = "chkMirror";
             this.chkMirror.Size = new System.Drawing.Size(154, 16);
             this.chkMirror.TabIndex = 1007;
@@ -251,9 +215,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 411);
             this.Controls.Add(this.chkMirror);
-            this.Controls.Add(this.chkHokan);
-            this.Controls.Add(this.chkHokanRot);
-            this.Controls.Add(this.chkHokanMove);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCnv);
@@ -298,9 +259,6 @@
         private System.Windows.Forms.TextBox txtInput;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox chkHokanMove;
-        private System.Windows.Forms.CheckBox chkHokanRot;
-        private System.Windows.Forms.CheckBox chkHokan;
         private System.Windows.Forms.CheckBox chkMirror;
     }
 }

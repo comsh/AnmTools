@@ -59,21 +59,6 @@ namespace AnmCnv {
                         foreach (AnmFrame f in fl) f.time=(f.time*1000+delay)/1000;
             }
 
-            if(chkHokan.Checked){
-                foreach (AnmBoneEntry bone in afw)
-                    foreach (AnmFrameList fl in bone){
-                        if(fl.Count==1) continue;
-                        if(!((fl.type>=100 && fl.type<=103 && chkHokanRot.Checked)||
-                             (fl.type>=104 && fl.type<=106 && chkHokanMove.Checked))) continue;
-                        fl.inOrder();
-                        AnmFrame prev=fl[0];
-                        for(int i=1; i<fl.Count; i++){
-                            prev.tan2=fl[i].tan1=(fl[i].value-prev.value)/(fl[i].time-prev.time);
-                            prev=fl[i];
-                        }
-                    }
-            }
-
             if(chkMirror.Checked){
                 foreach (AnmBoneEntry bone in afw){
                     bone.rename(mirrorBoneName(bone.boneName));
@@ -175,9 +160,6 @@ namespace AnmCnv {
         }
         private void chkDelay_CheckedChanged(object sender, EventArgs e) {
             txtDelay.Enabled = chkDelay.Checked;
-        }
-        private void chkHokan_CheckedChanged(object sender,EventArgs e) {
-            chkHokanMove.Enabled=chkHokanRot.Enabled=chkHokan.Checked;
         }
 
         // ファイル選択

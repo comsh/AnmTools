@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AnmCommon {
 	public class AnmFile : List<AnmBoneEntry> {
-		public int format=0;
+		public int format=1001;
 		public byte[] muneLR={0,0};   // format=1001の場合のみ。2000ではneiに持ってる
 
 		public AnmFile() {}
@@ -111,10 +111,10 @@ namespace AnmCommon {
 			return af.write(filename);
 		}
 
-		private static void mergeBone(AnmBoneEntry to, AnmBoneEntry from) {
+		public static void mergeBone(AnmBoneEntry to, AnmBoneEntry from) {
 			foreach(AnmFrameList fl in from) mergeFrameList(to,fl);
 		}
-		private static void mergeFrameList(AnmBoneEntry bone, AnmFrameList ml) {
+		public static void mergeFrameList(AnmBoneEntry bone, AnmFrameList ml) {
 			for (int i = 0; i<bone.Count; i++) {
 				int c = bone[i].type-ml.type;
 				if (c<0) continue;
@@ -130,7 +130,7 @@ namespace AnmCommon {
 			ml.inOrder();				// 新規なら整列済担保
 			bone.Add(ml);               // 最大要素。末尾に追加
 		}
-		private static void mergeFrame(AnmFrameList fl, AnmFrame f) {
+		public static void mergeFrame(AnmFrameList fl, AnmFrame f) {
 			for (int i = 0; i<fl.Count; i++) {
 				float c = fl[i].time-f.time;
 				if (c<0) continue;

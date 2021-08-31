@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnmCommon", "AnmCommon\AnmC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnmCnv", "AnmCnv\AnmCnv.csproj", "{2AC327F6-8164-4F73-A944-412A268EAA58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnmInterp", "AnmInterp\AnmInterp.csproj", "{CA75A46B-837C-4381-B780-08175F670831}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2AC327F6-8164-4F73-A944-412A268EAA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AC327F6-8164-4F73-A944-412A268EAA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AC327F6-8164-4F73-A944-412A268EAA58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA75A46B-837C-4381-B780-08175F670831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA75A46B-837C-4381-B780-08175F670831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA75A46B-837C-4381-B780-08175F670831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA75A46B-837C-4381-B780-08175F670831}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

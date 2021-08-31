@@ -69,5 +69,13 @@ namespace AnmDmp {
             dialog.Dispose();
             return fname;
         }
+
+        private void Form1_ResizeBegin(object sender,EventArgs e) {
+            SuspendLayout();
+        }
+
+        private void Form1_ResizeEnd(object sender,EventArgs e) {
+            ResumeLayout();
+        }
     }
 }
