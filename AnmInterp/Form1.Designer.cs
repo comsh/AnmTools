@@ -39,6 +39,8 @@
             this.lstFiles = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radInterpMvNop = new System.Windows.Forms.RadioButton();
+            this.radInterpRotNop = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -85,7 +87,7 @@
             // radInterpMv0
             // 
             this.radInterpMv0.AutoSize = true;
-            this.radInterpMv0.Location = new System.Drawing.Point(157, 18);
+            this.radInterpMv0.Location = new System.Drawing.Point(147, 18);
             this.radInterpMv0.Name = "radInterpMv0";
             this.radInterpMv0.Size = new System.Drawing.Size(65, 16);
             this.radInterpMv0.TabIndex = 4;
@@ -95,7 +97,7 @@
             // radInterpMvL
             // 
             this.radInterpMvL.AutoSize = true;
-            this.radInterpMvL.Location = new System.Drawing.Point(260, 18);
+            this.radInterpMvL.Location = new System.Drawing.Point(230, 18);
             this.radInterpMvL.Name = "radInterpMvL";
             this.radInterpMvL.Size = new System.Drawing.Size(71, 16);
             this.radInterpMvL.TabIndex = 5;
@@ -117,7 +119,7 @@
             // radInterpRot0
             // 
             this.radInterpRot0.AutoSize = true;
-            this.radInterpRot0.Location = new System.Drawing.Point(157, 18);
+            this.radInterpRot0.Location = new System.Drawing.Point(147, 18);
             this.radInterpRot0.Name = "radInterpRot0";
             this.radInterpRot0.Size = new System.Drawing.Size(65, 16);
             this.radInterpRot0.TabIndex = 7;
@@ -127,7 +129,7 @@
             // radInterpRotL
             // 
             this.radInterpRotL.AutoSize = true;
-            this.radInterpRotL.Location = new System.Drawing.Point(260, 18);
+            this.radInterpRotL.Location = new System.Drawing.Point(230, 18);
             this.radInterpRotL.Name = "radInterpRotL";
             this.radInterpRotL.Size = new System.Drawing.Size(71, 16);
             this.radInterpRotL.TabIndex = 8;
@@ -191,27 +193,51 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.radInterpMvNop);
             this.groupBox1.Controls.Add(this.radInterpMv0);
             this.groupBox1.Controls.Add(this.radInterpMvCR);
             this.groupBox1.Controls.Add(this.radInterpMvL);
             this.groupBox1.Location = new System.Drawing.Point(32, 238);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(408, 45);
+            this.groupBox1.Size = new System.Drawing.Size(431, 45);
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "移動の補間";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.radInterpRotNop);
             this.groupBox2.Controls.Add(this.radInterpRotCR);
             this.groupBox2.Controls.Add(this.radInterpRot0);
             this.groupBox2.Controls.Add(this.radInterpRotL);
             this.groupBox2.Location = new System.Drawing.Point(32, 289);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(408, 48);
+            this.groupBox2.Size = new System.Drawing.Size(431, 43);
             this.groupBox2.TabIndex = 19;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "回転の補間";
+            // 
+            // radInterpMvNop
+            // 
+            this.radInterpMvNop.AutoSize = true;
+            this.radInterpMvNop.Location = new System.Drawing.Point(318, 18);
+            this.radInterpMvNop.Name = "radInterpMvNop";
+            this.radInterpMvNop.Size = new System.Drawing.Size(76, 16);
+            this.radInterpMvNop.TabIndex = 7;
+            this.radInterpMvNop.TabStop = true;
+            this.radInterpMvNop.Text = "変更しない";
+            this.radInterpMvNop.UseVisualStyleBackColor = true;
+            // 
+            // radInterpRotNop
+            // 
+            this.radInterpRotNop.AutoSize = true;
+            this.radInterpRotNop.Location = new System.Drawing.Point(318, 18);
+            this.radInterpRotNop.Name = "radInterpRotNop";
+            this.radInterpRotNop.Size = new System.Drawing.Size(76, 16);
+            this.radInterpRotNop.TabIndex = 10;
+            this.radInterpRotNop.TabStop = true;
+            this.radInterpRotNop.Text = "変更しない";
+            this.radInterpRotNop.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -262,6 +288,8 @@
         private System.Windows.Forms.CheckedListBox lstFiles;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton radInterpMvNop;
+        private System.Windows.Forms.RadioButton radInterpRotNop;
     }
 }
 

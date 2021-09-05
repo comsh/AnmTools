@@ -148,10 +148,12 @@ namespace AnmCommon {
 		// フレーム時刻の一覧を作る
 		public SortedSet<int> getTimeSet() {
 			SortedSet<int> rslt = new SortedSet<int>();
-			foreach (AnmBoneEntry b in this)
-				foreach (AnmFrameList fl in b)
-					foreach (AnmFrame fr in fl)
-						rslt.Add((int)(fr.time * 1000));
+			foreach (AnmBoneEntry b in this) foreach (AnmFrameList fl in b) foreach (AnmFrame fr in fl) rslt.Add((int)(fr.time * 1000));
+			return rslt;
+		}
+		public SortedSet<float> getFloatTimeSet() {
+			SortedSet<float> rslt = new SortedSet<float>();
+			foreach (AnmBoneEntry b in this) foreach (AnmFrameList fl in b) foreach (AnmFrame fr in fl) rslt.Add(fr.time);
 			return rslt;
 		}
         public int getGender(){
@@ -216,7 +218,6 @@ namespace AnmCommon {
 			Sort((a, b) => a.type-b.type);
 			if(recursiveq) foreach (AnmFrameList fl in this) fl.inOrder();
 		}
-
 	}
 	public class AnmFrameList : List<AnmFrame> {
 		public byte type = 0;   // 100-106 4元数＋移動xyzの7種類
@@ -280,6 +281,7 @@ namespace AnmCommon {
 	// 全ボーン名を網羅していたら面倒なので(momotwistやらFootStepsやら何やら)
 	// 必要なボーン名だけ定義。それ以外は親を辿って親と同一部位とみなす。そのための定義と処理
 	public static class AnmBoneName {
+        public static char[] dlmt={'/'};
 		public static string[][] boneGroup ={
 			new string[]{ "Bip01","ManBip","ST_Root" },		// 男性の場合ManBip
 			new string[]{ "Pelvis" },
@@ -318,7 +320,7 @@ namespace AnmCommon {
 
 		// ボーン識別用のID(数値)を得る
 		public static int getBoneId(string bonename) {
-            string[] fragment=bonename.Split('/');
+            string[] fragment=bonename.Split(dlmt);
             for(int f=fragment.Length-1; f>=0; f--)
                 for(int i=0; i<boneGroup.Length; i++)
                     for(int j=0; j<boneGroup[i].Length; j++)
@@ -326,4 +328,19 @@ namespace AnmCommon {
 			return 0;   // 未定義で親もないということなのでルートに分類
 		}
 	}
+    public static class Quaternion {
+        public static void mul(float[] p,float[] q,float[] r){
+            float x= q[3]*r[0] -q[2]*r[1] +q[1]*r[2] +q[0]*r[3];
+            float y= q[2]*r[0] +q[3]*r[1] -q[0]*r[2] +q[1]*r[3];
+            float z=-q[1]*r[0] +q[0]*r[1] +q[3]*r[2] +q[2]*r[3];
+            float w=-q[0]*r[0] -q[1]*r[1] -q[2]*r[2] +q[3]*r[3];
+            p[0]=x; p[1]=y; p[2]=z; p[3]=w;
+        }
+        public static float[] inv(float[] q){
+            return new float[]{-q[0],-q[1],-q[2],q[3] };
+        }
+        public static void cp(float[] p,float[] q){
+            p[0]=q[0]; p[1]=q[1]; p[2]=q[2]; p[3]=q[3];
+        }
+    }
 }

@@ -33,8 +33,8 @@ namespace AnmInterp {
                 return;
             }
             int mt=0,rt=0;
-            if(radInterpMvL.Checked) mt=1; else if(radInterpMvCR.Checked) mt=2;
-            if(radInterpRotL.Checked) rt=1; else if(radInterpRotCR.Checked) rt=2;
+            if(radInterpMvL.Checked) mt=1; else if(radInterpMvCR.Checked) mt=2; else if(radInterpMvNop.Checked) mt=3;
+            if(radInterpRotL.Checked) rt=1; else if(radInterpRotCR.Checked) rt=2; else if(radInterpRotNop.Checked) rt=3;
             Interp(af,chkReverse.Checked,mt,rt);
             af.write(outfilename);
         }
