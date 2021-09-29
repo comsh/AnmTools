@@ -183,8 +183,8 @@ namespace AnmInterp {
                     }else if((fl.type<104 && rtype==2) || (fl.type>=104 && mtype==2)) {
                         int last=fl.Count-1;
                         if(loop && fl.Count>=3){ // [0]と[last]は意味的に同一
-                            fl[0].tan1=fl[0].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time-fl[last-1].time);
-                            fl[last].tan1=fl[last].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time-fl[last-1].time);
+                            fl[0].tan1=fl[0].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
+                            fl[last].tan1=fl[last].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
                         }else{  // loopしてないとき
                             fl[0].tan1=fl[0].tan2=(fl[1].value-fl[0].value)/(fl[1].time-fl[0].time);
                             fl[last].tan1=fl[last].tan2=(fl[last].value-fl[last-1].value)/(fl[last].time-fl[last-1].time);
