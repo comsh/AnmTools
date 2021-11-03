@@ -74,6 +74,7 @@ namespace AnmInterp {
         private void handleInputFileSelected(string fname) {
             if (!fname.EndsWith(".anm",StringComparison.Ordinal)) return;
             txtInFile.Text = fname;
+            lastPath=Path.GetFileName(fname);
 
             chkJoin.Checked=false;
             chkJoin.Enabled=false;
@@ -85,12 +86,14 @@ namespace AnmInterp {
                 FileListUpd(fname);
             }
         }
+        private string lastPath="";
         private string fileDialog() {
             string fname = "";
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "入力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.RestoreDirectory = true;
+            if(lastPath!="") dialog.InitialDirectory=lastPath;
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;
@@ -101,10 +104,11 @@ namespace AnmInterp {
             Match m=reg.Match(name);
             if(m.Success) name=name.Substring(0,name.Length-13)+".anm"; else name=name.Substring(0,name.Length-4)+"_modified.anm";
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.FileName =name;
+            dialog.FileName =Path.GetFileName(name);
+            dialog.InitialDirectory=Path.GetDirectoryName(name);
             dialog.Title = "出力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.RestoreDirectory = true;
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;

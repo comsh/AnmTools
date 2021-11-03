@@ -32,26 +32,42 @@ namespace AnmDmp {
             if (fname != "") handleInputFileSelected(fname);
         }
         private void handleInputFileSelected(string fname){
-            StringBuilder sb = new StringBuilder();
-            StringWriter sw=new StringWriter(sb);
-            if(DmpPmd.Dmp(fname,sw)<0) return;
-            sw.Close();
-            textBox1.Enabled=true;
-            textBox1.ReadOnly=false;
-            textBox1.Text=sb.ToString();
+            string tmp=Path.GetTempFileName();
+            try{
+                using(StreamWriter sw=File.CreateText(tmp)){
+                    if(DmpPmd.Dmp(fname,sw)<0){
+                        File.Delete(tmp);
+                        MessageBox.Show(DmpPmd.error,"エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                textBox1.Text=File.ReadAllText(tmp);
+                textBox1.Enabled=true;
+                textBox1.ReadOnly=false;
+                File.Delete(tmp);
+            }catch{
+                MessageBox.Show("ファイル読込に失敗しました", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             currentFilename=fname;
+            lastPath=Path.GetDirectoryName(fname);
         }
-        private void 保存ToolStripMenuItem_Click(object sender,EventArgs e) {
+        private void 別名保存ToolStripMenuItem_Click(object sender,EventArgs e) {
             string outfilename = outFileDialog();
             if (outfilename==null) return;
             DmpPmd.Pmd(textBox1.Text,outfilename);
         } 
+        private void 保存ToolStripMenuItem_Click(object sender,EventArgs e) {
+            DmpPmd.Pmd(textBox1.Text,currentFilename);
+        }
+        private string lastPath="";
         private string fileDialog() {
             string fname = "";
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "入力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.RestoreDirectory = true;
+            if(lastPath!="") dialog.InitialDirectory=lastPath;
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;
@@ -63,19 +79,15 @@ namespace AnmDmp {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Title = "出力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.FileName = System.IO.Path.GetFileNameWithoutExtension(currentFilename)+"_undumped.anm";
-            dialog.RestoreDirectory = true;
+            dialog.InitialDirectory=Path.GetDirectoryName(currentFilename);
+            dialog.FileName = Path.GetFileNameWithoutExtension(currentFilename)+"_undumped.anm";
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;
         }
 
-        private void Form1_ResizeBegin(object sender,EventArgs e) {
-            SuspendLayout();
-        }
-
-        private void Form1_ResizeEnd(object sender,EventArgs e) {
-            ResumeLayout();
-        }
+        private void Form1_ResizeBegin(object sender,EventArgs e) { SuspendLayout(); }
+        private void Form1_ResizeEnd(object sender,EventArgs e) { ResumeLayout(); }
     }
 }

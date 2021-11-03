@@ -44,7 +44,7 @@
             // 
             // btnCnv
             // 
-            this.btnCnv.Location = new System.Drawing.Point(173, 332);
+            this.btnCnv.Location = new System.Drawing.Point(151, 333);
             this.btnCnv.Name = "btnCnv";
             this.btnCnv.Size = new System.Drawing.Size(135, 23);
             this.btnCnv.TabIndex = 8;
@@ -55,7 +55,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(232, 188);
+            this.label9.Location = new System.Drawing.Point(245, 188);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 12);
             this.label9.TabIndex = 47;
@@ -73,7 +73,7 @@
             // txtDelay
             // 
             this.txtDelay.Enabled = false;
-            this.txtDelay.Location = new System.Drawing.Point(160, 185);
+            this.txtDelay.Location = new System.Drawing.Point(173, 185);
             this.txtDelay.MaxLength = 9;
             this.txtDelay.Name = "txtDelay";
             this.txtDelay.Size = new System.Drawing.Size(66, 19);
@@ -201,7 +201,7 @@
             // chkMirror
             // 
             this.chkMirror.AutoSize = true;
-            this.chkMirror.Location = new System.Drawing.Point(45, 275);
+            this.chkMirror.Location = new System.Drawing.Point(45, 279);
             this.chkMirror.Name = "chkMirror";
             this.chkMirror.Size = new System.Drawing.Size(154, 16);
             this.chkMirror.TabIndex = 1007;

@@ -15,6 +15,22 @@ namespace AnmCnv {
         // 変換実行
         private void btnCnv_Click(object sender, EventArgs e) {
             if (txtInput.Text=="") return;
+
+            // バリデーション
+            int newMaxTime=0,delay=0;
+            if (chkSpeed.Checked) {
+                if(!int.TryParse(txtSpeed.Text,out newMaxTime)||newMaxTime<=0){
+                    MessageBox.Show("最終フレーム時刻は正の整数で指定してください", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            if (chkDelay.Checked) {
+                if(!int.TryParse(txtDelay.Text,out delay)||delay<=0){
+                    MessageBox.Show("遅延時間は正の整数で指定してください", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             string outfilename = outFileDialog();
             if (outfilename==null) return;
 
@@ -25,12 +41,6 @@ namespace AnmCnv {
 
             // モーション速度変更
             if (chkSpeed.Checked) {
-                int newMaxTime=-1;
-                try { newMaxTime= int.Parse(txtSpeed.Text); } catch {}
-                if (newMaxTime<=0) {
-                    MessageBox.Show("最終フレーム時刻は正の整数で指定してください", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
                 SortedSet<int> ts = af.getTimeSet();
                 if (ts.Max!=0 && newMaxTime!=ts.Max) {
                     float speed = (float)newMaxTime/ts.Max;
@@ -48,12 +58,6 @@ namespace AnmCnv {
 
             // モーション開始遅延
             if (chkDelay.Checked) {
-                int delay=-1;
-                try{ delay = int.Parse(txtDelay.Text); }catch{}
-                if (delay<=0) {
-                    MessageBox.Show("遅延時間は正の整数で指定してください", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
                 foreach (AnmBoneEntry bone in afw)
                     foreach (AnmFrameList fl in bone)
                         foreach (AnmFrame f in fl) f.time=(f.time*1000+delay)/1000;
@@ -167,16 +171,6 @@ namespace AnmCnv {
                 return t.Replace("_L_","_R_");
             }
         }
-        private void RotInterp(AnmBoneEntry abe){
-            foreach (AnmFrameList fl in abe){
-                if(fl.type>=104) continue;
-                int last=fl.Count-1;
-                fl[0].tan1=fl[0].tan2=(fl[1].value-fl[0].value)/(fl[1].time-fl[0].time);
-                fl[last].tan1=fl[last].tan2=(fl[last].value-fl[last-1].value)/(fl[last].time-fl[last-1].time);
-                for(int i=1; i<last; i++)
-                    fl[i].tan1=fl[i].tan2=(fl[i+1].value-fl[i-1].value)/(fl[i+1].time-fl[i-1].time);
-            }
-        }
 
         // UI連動
         private void chkSpeed_CheckedChanged(object sender, EventArgs e) {
@@ -214,6 +208,7 @@ namespace AnmCnv {
         private void handleInputFileSelected(string fname) {
             if (!fname.EndsWith(".anm")) return;
             txtInput.Text = fname;
+            lastPath=System.IO.Path.GetDirectoryName(fname);
 
             af=AnmFile.fromFile(fname);
             if (af==null) return;
@@ -234,12 +229,14 @@ namespace AnmCnv {
             chkSpeed.Checked = false;
             chkDelay.Checked = false;
         }
+        private string lastPath="";
         private string fileDialog() {
             string fname = "";
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "入力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.RestoreDirectory = true;
+            if(lastPath!="") dialog.InitialDirectory=lastPath;
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;
@@ -250,7 +247,8 @@ namespace AnmCnv {
             dialog.FileName = System.IO.Path.GetFileNameWithoutExtension(txtInput.Text)+"_modified.anm";
             dialog.Title = "出力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.RestoreDirectory = true;
+            dialog.InitialDirectory=System.IO.Path.GetDirectoryName(txtInput.Text);
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;

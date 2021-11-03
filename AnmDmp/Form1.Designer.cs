@@ -27,28 +27,33 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.読込ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.別名保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
             // 
+            this.textBox1.AcceptsTab = true;
+            this.textBox1.CausesValidation = false;
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Enabled = false;
             this.textBox1.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBox1.Location = new System.Drawing.Point(0, 24);
-            this.textBox1.MaxLength = 1000000000;
+            this.textBox1.MaxLength = 0;
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(484, 387);
             this.textBox1.TabIndex = 0;
+            this.textBox1.WordWrap = false;
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.読込ToolStripMenuItem,
-            this.保存ToolStripMenuItem});
+            this.保存ToolStripMenuItem,
+            this.別名保存ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(484, 24);
@@ -65,9 +70,16 @@
             // 保存ToolStripMenuItem
             // 
             this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.保存ToolStripMenuItem.Text = "保存";
+            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.保存ToolStripMenuItem.Text = "上書保存";
             this.保存ToolStripMenuItem.Click += new System.EventHandler(this.保存ToolStripMenuItem_Click);
+            // 
+            // 別名保存ToolStripMenuItem
+            // 
+            this.別名保存ToolStripMenuItem.Name = "別名保存ToolStripMenuItem";
+            this.別名保存ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.別名保存ToolStripMenuItem.Text = "別名保存";
+            this.別名保存ToolStripMenuItem.Click += new System.EventHandler(this.別名保存ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -97,6 +109,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 読込ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 別名保存ToolStripMenuItem;
     }
 }
 

@@ -1,19 +1,15 @@
 ﻿using AnmCommon;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-/* AnmDmpとanmcatとの共通処理。ソースの「リンクとして追加」で共有 */
 namespace AnmDmpCommon {
     public static class DmpPmd {
         public static string error="";
 
-        // anmファイル→テキスト(TextWrite。実体は標準出力またはStringBuilder)
-        public static int Dmp(string fname, TextWriter tw){
+        // anmファイル→テキスト
+        public static int Dmp(string fname, StreamWriter tw){
             AnmFile af =AnmFile.fromFile(fname);
-            if (af==null){ error="ファイルの読見込みに失敗しました"; return -1;}
-
-            SortedSet<int> ts=af.getTimeSet();
+            if (af==null){ error="ファイル読込みに失敗しました"; return -1;}
 
             tw.Write("Filename:"); tw.WriteLine(fname);
             tw.Write("Format:"); tw.Write(af.format);
@@ -25,26 +21,38 @@ namespace AnmDmpCommon {
             foreach (AnmBoneEntry bone in af){
                 tw.Write("["); tw.Write(bone.boneName); tw.WriteLine("]");
 
-                foreach (int ms in ts) {        // 時間順で並び替える
-                    bool msShown = false;
-                    foreach (AnmFrameList fl in bone) {
-                        foreach (AnmFrame f in fl) {
-                            int t = (int)(f.time*1000);
-                            if (t==ms) {
-                                if (!msShown) {
-                                    tw.Write(ms.ToString("00000000")); 
-                                    msShown=true;
-                                } else {
-                                    tw.Write("        ");
-                                }
-                                tw.Write("    ");
-                                tw.Write(types[fl.type-100]);
-                                tw.Write(f.value.ToString("F9").PadLeft(16));
-                                tw.Write(f.tan1.ToString("F9").PadLeft(16));
-                                tw.WriteLine(f.tan2.ToString("F9").PadLeft(16));
-                            }
-                        }
+                bone.inOrder();
+                var fla=new AnmFrameList[7];
+                var flia=new int[7];
+                foreach (AnmFrameList fl in bone) fla[fl.type-100]=fl;
+                for(int i=0; i<7; i++) if(fla[i]==null||fla[i].Count==0) flia[i]=-1; else flia[i]=0;
+                int lastt=-1;
+                float mint=0;
+                int mini;
+                while(true){    // マージソートの要領で時間順に出力
+                    for(mini=0; mini<7; mini++) if(flia[mini]>=0){
+                        mint=fla[mini][flia[mini]].time;
+                        break;
                     }
+                    if(mini==7) break;
+                    for(int i=mini+1; i<7; i++) if(flia[i]>=0){
+                        float t=fla[i][flia[i]].time;
+                        if(mint>t){mint=t; mini=i;}
+                    }
+                    AnmFrame f=fla[mini][flia[mini]];
+                    int ms=(int)(f.time*1000);
+                    if (ms!=lastt) {
+                        tw.Write(ms.ToString("00000000")); 
+                        lastt=ms;
+                    } else {
+                        tw.Write("        ");
+                    }
+                    tw.Write("    ");
+                    tw.Write(types[mini]);
+                    tw.Write(f.value.ToString("F9").PadLeft(16));
+                    tw.Write(f.tan1.ToString("F9").PadLeft(16));
+                    tw.WriteLine(f.tan2.ToString("F9").PadLeft(16));
+                    if(flia[mini]==fla[mini].Count-1) flia[mini]=-1; else flia[mini]++;
                 }
             }
             return 0;

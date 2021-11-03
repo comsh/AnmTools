@@ -40,6 +40,8 @@ namespace AnmJoin {
         }
 
         private void btnJoin_Click(object sender, EventArgs e) {
+            if(lstFiles.Items.Count==0) return;
+
             string outname = outFileDialog();
             if (outname != null) {
                 List<AnmFile> files = new List<AnmFile>();
@@ -55,17 +57,21 @@ namespace AnmJoin {
         // 下請け
 
         private void addFiles(string[] files) {  // 重複を省きつつリストにファイルを追加
+            if(files==null||files.Length==0) return;
             foreach(string file in files) {
                 if(!lstFiles.Items.Contains(file)) lstFiles.Items.Add(file);
             }
+            lastPath=System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(files[0]));
         }
+        private string lastPath="";
         private string[] inFileDialog() {
             string[] fname = null;
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "入力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
             dialog.Multiselect=true;
-            dialog.RestoreDirectory = true;
+            if(lastPath!="") dialog.InitialDirectory=lastPath;
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileNames;
             dialog.Dispose();
             return fname;
@@ -75,7 +81,8 @@ namespace AnmJoin {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Title = "出力anmファイル選択";
             dialog.Filter = "anmファイル|*.anm";
-            dialog.RestoreDirectory = true;
+            if(lastPath!="") dialog.InitialDirectory=lastPath;
+            //dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == DialogResult.OK) fname = dialog.FileName;
             dialog.Dispose();
             return fname;
