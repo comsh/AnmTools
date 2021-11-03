@@ -89,9 +89,9 @@ namespace AnmSlice {
         private AnmFrame HermiteIp(float ft,AnmFrame f1,AnmFrame f2){ // エルミート補間
             float dt=f2.time-f1.time, dv=f2.value-f1.value;
             float s=(ft-f1.time)/dt;
-            float tan1=f1.tan2, tan2=f2.tan1;
+            float tan1=f1.tan2*dt, tan2=f2.tan1*dt;
             var ret=new AnmFrame(ft);
-            float k1=-tan1+tan2-2*dv, k2=3*dv-2*tan1-tan2;
+            float k1=tan1+tan2-2*dv, k2=3*dv-2*tan1-tan2;
             ret.value=((k1*s+k2)*s+tan1)*s+f1.value;
             ret.tan1=ret.tan2=(3*k1*s+2*k2)*s+tan1; // 上の微分
             return ret;
@@ -154,6 +154,7 @@ namespace AnmSlice {
             txtEtime.Text="";
 			SortedSet<int> ts = af.getTimeSet();
             if(ts.Count==0) return;
+            lstTimes.Items.Clear();
             foreach(int t in ts) lstTimes.Items.Add(t);
             mintime=(int)lstTimes.Items[0];
             maxtime=(int)lstTimes.Items[lstTimes.Items.Count-1];
