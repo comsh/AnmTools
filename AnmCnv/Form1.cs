@@ -56,7 +56,7 @@ namespace AnmCnv {
                 }
             }
 
-            // モーション開始遅延
+            // モーション開始遅延(AnmJoinでの結合用)
             if (chkDelay.Checked) {
                 foreach (AnmBoneEntry bone in afw)
                     foreach (AnmFrameList fl in bone)
@@ -69,10 +69,11 @@ namespace AnmCnv {
                     bone.rename(mirrorBoneName(bone.boneName));
                     if(bone.boneId==0){ // ルート直下
                         if(bone.boneName=="Bip01"||bone.boneName=="ManBip")
-                            negFrameList2(bone,AXIS.X,kumitate,rKumitate);
+                            negFrameList2(bone,AXIS.Y,AXIS.X);
                         else negFrameList(bone,AXIS.X);
-                    }else if(bone.boneId==1) negFrameList2(bone,AXIS.Y,kumitateLB,rKumitateLB); // 骨盤
-                    else if(bone.boneId==10) negFrameList2(bone,AXIS.Y,kumitateUB,rKumitateUB); // 背骨1
+                    }else if(bone.boneId==1) negFrameList2(bone,AXIS.Z); // 骨盤
+                    else if(bone.boneId==10) negFrameList2(bone,AXIS.Z); // 背骨1
+                    else if(bone.boneId==16||bone.boneId==22) negFrameListMune(bone); // 胸
                     else negFrameList(bone,AXIS.Z);
                 }
             }
@@ -82,14 +83,22 @@ namespace AnmCnv {
             // 書き出し
             afw.write(outfilename);
         }
-        private bool[] negarr(AXIS ax){
+        // 左右反転の考え方
+        // 指定した軸方向(その部位で左右にあたる方向)について
+        //   移動: 移動量 * -1
+        //   回転: 中心軸の指定軸方向成分 * -1、および回転角 * -1
+        private bool[] negarr(AXIS ax,AXIS axm=AXIS.N){
             bool[] neg=new bool[7];
-            if(ax==AXIS.X) neg[0]=neg[3]=neg[4]=true;
-            else if(ax==AXIS.Y) neg[1]=neg[3]=neg[5]=true;
-            else neg[2]=neg[3]=neg[6]=true;
+
+            neg[3]=true;
+            if(ax==AXIS.X) neg[0]=true; else if(ax==AXIS.Y) neg[1]=true; else neg[2]=true;
+
+            AXIS ax2=(axm==AXIS.N)?ax:axm;
+            if(ax2==AXIS.X) neg[4]=true; else if(ax2==AXIS.Y) neg[5]=true; else neg[6]=true;
+
             return neg;
         }
-        enum AXIS{ X,Y,Z };
+        enum AXIS{ X,Y,Z,N };
         private void negFrameList(AnmBoneEntry abe,AXIS ax){
             bool[] neg=negarr(ax);
             foreach (AnmFrameList fl in abe){
@@ -100,31 +109,51 @@ namespace AnmCnv {
                 }
             }
         }
-        // 組み立て変換込みの反転
-        private void negFrameList2(AnmBoneEntry abe,AXIS ax,float[] km,float[] rkm){
-            bool[] neg=negarr(ax);
-            List<float[]> ql=new List<float[]>();   // 四元数
+        // 胸用
+        private void negFrameListMune(AnmBoneEntry abe){
+            // 胸は左右のボーンがローカルx軸方向に180度ねじれた関係
+            // (上腕を前に出した姿勢におけるClavicle＋UpperArmの回転をMune_L/R１つでやる感じ?)
+            // なので右から{1,0,0,0}をかけるが、数式上結果は{w,z,-y,-x}になる
+            // モーションを左右反転(親z軸方向)するためにzとwを-1倍するので
+            // {-w,-z,-y,-x}が答え
             foreach (AnmFrameList fl in abe){
-                if(fl.type<104){    // 回転はまず四元数取得だけ
+                if(fl.type<104) fl.type=(byte)(203-fl.type); // 入れ替え
+                if(fl.type<104||fl.type==106) foreach (AnmFrame f in fl){
+                    f.value=-f.value;
+                    f.tan1=-f.tan1;
+                    f.tan2=-f.tan2;
+                }
+            }
+            abe.inOrder(); // fl.typeを付け替えたのでソート
+        }
+        // 組み立て変換込みの反転
+        // 組み立て変換をQ、ポーズ正味のポーズ部分をPとすると、Qはそのまま、Pのみ左右反転する。
+        // anmファイル上のデータはQPの値。左から~QをかけてPを取り出し(~Q(QP)=(~QQ)P=P)、
+        // Pの左右を反転した後、左からQをかけてQPに戻す
+        private void negFrameList2(AnmBoneEntry abe,AXIS ax,AXIS axm=AXIS.N){
+            bool[] neg=negarr(ax,axm);
+            List<float[]> ql=new List<float[]>();   // 四元数
+            // これはさすがに、回転は一度四元数の形にまとめないと処理できない
+            // 移動は普通に済ませる
+            foreach (AnmFrameList fl in abe){
+                if(fl.type<104){
                     for(int i=0; i<fl.Count; i++){
                         if(ql.Count==i) ql.Add(new float[4]);
                         ql[i][fl.type-100]=fl[i].value;
                     }
-                }else if(neg[fl.type-100]) foreach (AnmFrame f in fl){ // 移動の反転は済ませる
+                }else if(neg[fl.type-100]) foreach (AnmFrame f in fl){
                     f.value=-f.value;f.tan1=-f.tan1;f.tan2=-f.tan2;
                 }
             }
             foreach(float[] q in ql){
-                // 右から組み立て変換の共益をかける。
-                // 定数だから式で書いた方がいいけど、別に速度を気にするツールでもないからこれでもOK
-                Quaternion.mul(q,q,rkm);
-                // 結果を反転
+                Quaternion.mul(q,rKumitate,q);
+                // 正味部分(P)を左右反転
                 if(neg[0]) q[0]*=-1;
                 if(neg[1]) q[1]*=-1;
                 if(neg[2]) q[2]*=-1;
                 if(neg[3]) q[3]*=-1;
-                // 組み立て変換をかけ直す
-                Quaternion.mul(q,q,km);
+                // 組み立て変換を戻す
+                Quaternion.mul(q,kumitate,q);
             }
             foreach (AnmFrameList fl in abe){
                 if(fl.type>=104) continue;
@@ -144,7 +173,7 @@ namespace AnmCnv {
 
                 for(int i=1; i<fl.Count-1; i++){ // 補間値
                     if(fl[i].tan1!=fl[i].tan2){     // 線形補間など
-                        // 補正値を値の差の比例計算で修正
+                        // 補間値を値の差の比例計算で修正
                         if(!isZero(d=old[i]-old[i-1])) fl[i].tan1*=(ql[i][ty]-ql[i-1][ty])/d;
                         if(!isZero(d=old[i+1]-old[i])) fl[i].tan2*=(ql[i+1][ty]-ql[i][ty])/d;
                     }else{  // 曲線補間
@@ -154,12 +183,8 @@ namespace AnmCnv {
             }
         }
         private bool isZero(float f){ return f>-0.00000001f &&f<0.00000001f; }
-        private static float[] kumitate={-0.5f,0.5f,0.5f,0.5f};    // Bip01
-        private static float[] rKumitate=Quaternion.inv(kumitate);
-        private static float[] kumitateUB={-0.5f,0.5f,0.5f,0.5f};  // 上半身
-        private static float[] rKumitateUB=Quaternion.inv(kumitateUB);
-        private static float[] kumitateLB={0.5f,-0.5f,0.5f,0.5f};  // 下半身
-        private static float[] rKumitateLB=Quaternion.inv(kumitateLB);
+        private static float[] kumitate={0.5f,-0.5f,-0.5f,-0.5f};    // Bip01
+        private static float[] rKumitate={-0.5f,0.5f,0.5f,-0.5f};
         private string mirrorBoneName(string bname){
             string t=Regex.Replace(bname,@"L\b","R"); // ほとんどこれで拾えるけど
             if(t==bname){
