@@ -1,4 +1,5 @@
 ﻿using AnmCommon;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -40,7 +41,7 @@ namespace AnmDmpCommon {
                         if(mint>t){mint=t; mini=i;}
                     }
                     AnmFrame f=fla[mini][flia[mini]];
-                    int ms=(int)(f.time*1000);
+                    int ms=(int)Math.Round(f.time*1000);
                     if (ms!=lastt) {
                         tw.Write(ms.ToString("00000000")); 
                         lastt=ms;

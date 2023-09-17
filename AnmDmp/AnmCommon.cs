@@ -148,7 +148,7 @@ namespace AnmCommon {
 		// フレーム時刻の一覧を作る
 		public SortedSet<int> getTimeSet() {
 			SortedSet<int> rslt = new SortedSet<int>();
-			foreach (AnmBoneEntry b in this) foreach (AnmFrameList fl in b) foreach (AnmFrame fr in fl) rslt.Add((int)(fr.time * 1000));
+			foreach (AnmBoneEntry b in this) foreach (AnmFrameList fl in b) foreach (AnmFrame fr in fl) rslt.Add((int)Math.Round(fr.time * 1000));
 			return rslt;
 		}
 		public SortedSet<float> getFloatTimeSet() {
@@ -247,6 +247,34 @@ namespace AnmCommon {
 			Sort((a, b) => Math.Sign(a.time-b.time));
 		}
 
+        public static void Linear(AnmFrameList fl){
+            if(fl.Count==0) return;
+            if(fl.Count==1){ fl[0].tan1=fl[0].tan2=0; return;};
+
+            fl[0].tan1=fl[0].tan2=(fl[1].value-fl[0].value)/(fl[1].time-fl[0].time);
+            int last=fl.Count-1;
+            for(int i=1; i<last; i++){
+                fl[i].tan1=(fl[i].value-fl[i-1].value)/(fl[i].time-fl[i-1].time);
+                fl[i].tan2=(fl[i+1].value-fl[i].value)/(fl[i+1].time-fl[i].time);
+            }
+            fl[last].tan1=fl[last].tan2=(fl[last].value-fl[last-1].value)/(fl[last].time-fl[last-1].time);
+        }
+        public static void CatmullRom(AnmFrameList fl){
+            if(fl.Count<3){ Linear(fl); return; }
+
+            float d=fl[0].value-fl[fl.Count-1].value;
+            bool loopq=(-0.000001<d && d<0.000001);
+
+            int last=fl.Count-1;
+            if(loopq){
+                fl[0].tan1=fl[0].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
+                fl[last].tan1=fl[last].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
+            }else{
+                fl[0].tan1=fl[0].tan2=(fl[1].value-fl[0].value)/(fl[1].time-fl[0].time);
+                fl[last].tan1=fl[last].tan2=(fl[last].value-fl[last-1].value)/(fl[last].time-fl[last-1].time);
+            }
+            for(int i=1; i<last; i++) fl[i].tan1=fl[i].tan2=(fl[i+1].value-fl[i-1].value)/(fl[i+1].time-fl[i-1].time);
+        }
 	}
 	public class AnmFrame {     // キーフレーム。UnityのKeyframe(WeightedMode.None)
 		public float time = 0;      // フレーム時刻(1/1000ms)
