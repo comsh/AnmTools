@@ -263,12 +263,12 @@ namespace AnmCommon {
             if(fl.Count<3){ Linear(fl); return; }
 
             float d=fl[0].value-fl[fl.Count-1].value;
-            bool loopq=(-0.000001<d && d<0.000001);
+            bool loopq=(-0.00001<d && d<0.00001);
 
             int last=fl.Count-1;
             if(loopq){
-                fl[0].tan1=fl[0].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
-                fl[last].tan1=fl[last].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
+                fl[0].tan1=fl[0].tan2=fl[last].tan1
+                    =fl[last].tan2=(fl[1].value-fl[last-1].value)/(fl[1].time+(fl[last].time-fl[last-1].time));
             }else{
                 fl[0].tan1=fl[0].tan2=(fl[1].value-fl[0].value)/(fl[1].time-fl[0].time);
                 fl[last].tan1=fl[last].tan2=(fl[last].value-fl[last-1].value)/(fl[last].time-fl[last-1].time);
