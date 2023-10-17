@@ -88,7 +88,7 @@ public static class Import {
         if(manq){
             bones[0]="ManBip";
             bones[5]="ManBip Spine2";
-            bones[8]=bones[9]=bones[64]=bones[65]=bones[3]="";
+            bones[8]=bones[9]=bones[61]=bones[63]=bones[64]=bones[65]=bones[3]="";
         }else{
             bones[0]="Bip01";
             bones[66]=bones[67]=bones[68]="";
@@ -176,6 +176,7 @@ public static class Import {
                     // Bip01以外
                     for(int i=3; i<sa.Length; i++){
                         if(bnl[i-2]=="") continue;
+                        if(sa[i]=="") continue;
                         sa2=sa[i].Split(',');
                         if(sa2.Length!=4) return LoadErr($"{lno}行{i}列: 四元数が不正です");
                         for(int j=0; j<4; j++){
